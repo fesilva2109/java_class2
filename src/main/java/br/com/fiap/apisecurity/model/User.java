@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -22,7 +23,12 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        if(UserRole.ADMIN.equals(role)){
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"),
+            new SimpleGrantedAuthority("ROLE_USER"));
+        }else {
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        }
     }
 
     @Override
